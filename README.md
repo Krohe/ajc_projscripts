@@ -1,3 +1,3 @@
 # ajc_projscripts
 
-Je suis un update
+Ici, je veux faire une collection de scripts pour faciliter l'installation des serveurs pendant le projet file rouge.
