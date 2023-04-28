@@ -1,0 +1,73 @@
+---
+# https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-20-04
+# https://docs.docker.com/engine/install/debian/
+# - name: "Supprime docker et composants si existant"
+#   apt:
+#     name:
+#       - docker
+#       - docker-engine
+#       - docker.io
+#       - containerd
+#       - runc
+#     state: absent
+#     autoremove: yes
+- name: Installation des autres packages requise"
+  apt:
+    name:
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python3-pip
+    state: present
+    update_cache: true
+
+- name: One way to avoid apt_key once it is removed from your distro
+  block:
+    - name: ajouter le repo-key de docker (gpg)
+      get_url:
+        url: "https://download.docker.com/linux/{{serveur_os}}/gpg"
+        dest: /etc/apt/trusted.gpg.d/docker.asc
+    - name: Add Docker Repository
+      apt_repository:
+        repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/docker.asc] https://download.docker.com/linux/{{serveur_os}} bullseye stable"
+        state: present
+
+- name: Update apt et installation docker-ce
+  apt:
+    name: docker-ce
+    state: present
+    update_cache: true
+- name: Update apt et installation docker-ce-cli
+  apt:
+    name: docker-ce-cli
+    state: present
+    update_cache: true
+- name: Update apt et installation reste du docker-composants
+  apt:
+    name: 
+      - containerd
+      - docker-buildx-plugin
+      - docker-compose-plugin
+    state: present
+    update_cache: true
+
+# https://docs.docker.com/engine/install/linux-postinstall/
+- name: Ajoute la groupe docker pour l'admin
+  group:
+    name: docker
+    state: present
+- name: Ajoute l'administrateur dans la groupe docker
+  user:
+    name: "{{serveur_administrateur}}"
+    append: true
+    groups: docker
+- name: start and enable docker et containerd
+  systemd:
+    state: started
+    enabled: true
+    name: docker.service
+- name: start and enable docker et containerd
+  systemd:
+    state: started
+    enabled: true
+    name: containerd.service

@@ -1,0 +1,5 @@
+- name: Playbook d'installation infrastructure
+  hosts: serveur
+  become: true
+  roles:
+    - deploy_docker
