@@ -21,15 +21,20 @@
     state: present
     update_cache: true
 
+- name: Update+Upgrade
+  apt:
+    update_cache: true
+    upgrade: full
+
 - name: One way to avoid apt_key once it is removed from your distro
   block:
     - name: ajouter le repo-key de docker (gpg)
       get_url:
-        url: "https://download.docker.com/linux/{{serveur_os}}/gpg"
+        url: "https://download.docker.com/linux/ubuntu/gpg"
         dest: /etc/apt/trusted.gpg.d/docker.asc
     - name: Add Docker Repository
       apt_repository:
-        repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/docker.asc] https://download.docker.com/linux/{{serveur_os}} bullseye stable"
+        repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/docker.asc] https://download.docker.com/linux/ubuntu jammy stable"
         state: present
 
 - name: Update apt et installation docker-ce
@@ -58,15 +63,19 @@
     state: present
 - name: Ajoute l'administrateur dans la groupe docker
   user:
-    name: "{{serveur_administrateur}}"
+    name: "{{ansible_user}}"
     append: true
     groups: docker
-- name: start and enable docker et containerd
-  systemd:
+
+- name: start docker
+  service:
     state: started
+    name: docker.service
+- name: enable docker
+  systemd:
     enabled: true
     name: docker.service
-- name: start and enable docker et containerd
+- name: start and enable containerd
   systemd:
     state: started
     enabled: true

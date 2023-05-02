@@ -1,8 +1,20 @@
-[serveur]
-192.168.56.3
+[monitor]
+137.74.106.229
+
+[git]
+137.74.106.220
+
+[prod]
+137.74.106.222
+
+[monitor:vars]
+ansible_user=UbuAJC11
+
+[git:vars]
+ansible_user=UbuAJC02
+
+[prod:vars]
+ansible_user=UbuAJC04
 
 [all:vars]
-ansible_user=kevin
-ansible_become_pass=kevin
-serveur_os=debian
-serveur_administrateur=kevin
+ansible_become_pass=AJCFormation64!
