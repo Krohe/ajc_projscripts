@@ -1,5 +1,5 @@
 - name: Playbook d'installation de Grafana
-  hosts: serveur
+  hosts: prod
   become: true
   vars:
     grafana_version: 8.3.2
