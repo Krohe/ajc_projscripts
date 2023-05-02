@@ -1,0 +1,70 @@
+- name: Playbook d'installation de prometheus
+  hosts: serveur
+  become: true
+  vars:
+    prometheus_version: 2.37.6
+    prometheus_conf_dir: /etc/prometheus
+    prometheus_data_dir: /var/lib/prometheus
+
+  tasks:
+    - name: Téléchargement de l'archive Prometheus version 2.37.6
+      unarchive:
+        src: https://github.com/prometheus/prometheus/releases/download/v{{prometheus_version}}/prometheus-{{prometheus_version}}.linux-amd64.tar.gz
+        dest: /opt/
+        remote_src: yes
+
+    - name: Creation de l'utilisateur prometheus.
+      user:
+        name: prometheus
+        shell: /bin/false
+        system: yes
+    
+    - name: Creation du repertoire de configuration prometheus.
+      file:
+        path: "{{prometheus_conf_dir}}"
+        state: directory
+        owner: prometheus
+        group: prometheus
+        mode: 0755
+
+    - name: Copie des fichiers binaires de prometheus dans /usr/local/bin/*
+      copy:
+        src: "/opt/prometheus-{{prometheus_version}}.linux-amd64/{{item.src}}"
+        dest: "{{item.dest}}"
+        remote_src: yes
+        owner: "{{item.owner}}"
+        group: "{{item.group}}"
+        mode: 0755
+      with_items:
+        - { src: "promtool", dest: "/usr/local/bin/", owner: root, group: root }
+        - { src: "prometheus", dest: "/usr/local/bin/", owner: root, group: root }
+        - { src: "consoles", dest: "{{prometheus_conf_dir}}", owner: prometheus, group: prometheus }
+        - { src: "console_libraries", dest: "{{prometheus_conf_dir}}", owner: prometheus, group: prometheus }
+        # - { src: "prometheus.yml", dest: "{{prometheus_conf_dir}}", owner: prometheus, group: prometheus }
+    
+    - name: Création du répertoire de stockage de données prometheus
+      file:
+        path: "{{prometheus_data_dir}}"
+        state: directory
+        owner: prometheus
+        group: prometheus
+        mode: 0755
+    
+    
+    - name: Copie de la configuration et du fichier service prometheus
+      copy:
+        src: ./../files/{{item.src}}
+        dest: "{{item.dest}}"
+        owner: "{{item.owner}}"
+        group: "{{item.group}}"
+        mode: 0644
+      with_items: 
+        - { src: prometheus.service, dest: /etc/systemd/system/prometheus.service, owner: root, group: root }
+        - { src: prometheus.yml, dest: /etc/prometheus/prometheus.yml, owner: prometheus, group: prometheus }
+
+    - name: Démarrage du service Prometheus
+      service:
+        name: prometheus
+        state: restarted
+        enabled: yes
+

@@ -1,0 +1,30 @@
+- name: Playbook d'installation de Grafana
+  hosts: serveur
+  become: true
+  vars:
+    grafana_version: 8.3.2
+
+  tasks:
+    - name: Téléchargement du paquet .deb grafana
+      get_url:
+        url: https://dl.grafana.com/oss/release/grafana_{{grafana_version}}_amd64.deb
+        dest: /tmp/grafana_{{grafana_version}}_amd64.deb
+
+    - name: Installation de grafana depuis le .Deb
+      apt:
+        deb: /tmp/grafana_{{grafana_version}}_amd64.deb
+        update_cache: yes
+
+    # - name: Configuration Grafana
+    #   copy:
+    #     src: ./conf/datasource.yml
+    #     dest: /etc/grafana/provisioning/datasources/datasource.yml
+    #     owner: root
+    #     group: root
+    #     mode: 0644
+
+    - name: Démarrage du service grafana
+      systemd:
+        name: grafana-server
+        state: started
+        enabled: yes
