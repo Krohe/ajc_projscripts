@@ -1,5 +1,5 @@
 - name: Playbook d'installation de prometheus
-  hosts: serveur
+  hosts: prod
   become: true
   vars:
     prometheus_version: 2.37.6
