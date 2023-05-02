@@ -1,0 +1,20 @@
+# https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-20-04
+# https://docs.docker.com/engine/install/debian/
+# changer hosts par all
+- name: "installation docker"
+  hosts: sonar
+    #  become: true
+  tasks:
+    - name: set vm.max_map_count to 262144 in sysctl for SonarQube
+      sysctl: name={{ item.key }} value={{ item.value }}
+      with_items:
+        - { key: "vm.max_map_count", value: "262144" }
+        - { key: "fs.file-max", value: "131072" }
+    - name: creation dossier docker
+      file:
+        state: directory
+        path: ~/sonar
+    - name: Copier fichier docker-compose
+      copy:
+        src: ../../docker/SonarQube/docker-compose.yml
+        dest: ~/sonar/docker-compose.yml

@@ -7,13 +7,13 @@
 [monitor]
 137.74.106.222
 
-[monitor:vars]
+[sonar:vars]
 ansible_user=UbuAJC11
 
-[git:vars]
+[gitprod:vars]
 ansible_user=UbuAJC02
 
-[prod:vars]
+[monitor:vars]
 ansible_user=UbuAJC04
 
 [all:vars]

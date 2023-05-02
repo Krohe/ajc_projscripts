@@ -5,8 +5,10 @@ Ici, je collecte tout les scripts on a utilisé pour démarré notre infrastruct
 * Dossier playbooks:
     * fichier inventory avec notre machines à distantes
     * dossier roles avec notre playbooks
-        * docker_deploy
-
+        * docker_deploy.yml
+        * SonarQube_deploy.yml (pas fini)
+* Dossier Docker
+    * docker-compose pour mise-en-place SonarQube avec une Postgresql base de donnée
 
 * Dossier scripts:
     * une collections plus ainée avec 4 scripts sh:
