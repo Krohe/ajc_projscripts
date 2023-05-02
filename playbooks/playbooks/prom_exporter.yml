@@ -1,5 +1,5 @@
 - name: Playbook d'installation de node_exporter
-  hosts: serveur
+  hosts: prod
   become: true
   vars:
     node_exporter_version: 1.5.0
