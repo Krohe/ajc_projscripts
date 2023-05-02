@@ -1,0 +1,65 @@
+# https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-20-04
+# https://docs.docker.com/engine/install/debian/
+# changer hosts par all
+- name: "installation docker"
+  hosts: sonar
+  become: true
+  tasks:
+    - name: Installation des autres packages requise"
+      apt:
+        name:
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+        state: present
+        update_cache: true
+
+    - name: Update+Upgrade
+      apt:
+        update_cache: true
+        upgrade: full
+
+    - name: One way to avoid apt_key once it is removed from your distro
+      block:
+        - name: ajouter le repo-key de docker (gpg)
+          get_url:
+            url: "https://download.docker.com/linux/ubuntu/gpg"
+            dest: /etc/apt/trusted.gpg.d/docker.asc
+        - name: Add Docker Repository
+          apt_repository:
+            repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/docker.asc] https://download.docker.com/linux/ubuntu jammy stable"
+            state: present
+
+    - name: Update apt et installation docker-ce
+      apt:
+        name: 
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+        update_cache: true
+
+# https://docs.docker.com/engine/install/linux-postinstall/
+    - name: Ajoute la groupe docker pour l'admin
+      group:
+        name: docker
+        state: present
+    - name: Ajoute l'administrateur dans la groupe docker
+      user:
+        name: "{{ansible_user}}"
+        append: true
+        groups: docker
+
+    - name: enable and start docker
+      systemd:
+        state: started
+        enabled: true
+        name: docker.service
+    - name: start and enable containerd
+      systemd:
+        state: started
+        enabled: true
+        name: containerd.service

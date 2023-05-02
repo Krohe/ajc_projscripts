@@ -1,10 +1,10 @@
-[monitor]
+[sonar]
 137.74.106.229
 
-[git]
+[gitprod]
 137.74.106.220
 
-[prod]
+[monitor]
 137.74.106.222
 
 [monitor:vars]

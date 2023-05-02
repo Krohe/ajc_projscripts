@@ -1,5 +1,0 @@
-- name: Playbook d'installation infrastructure
-  hosts: monitor
-  become: true
-  roles:
-    - deploy_docker

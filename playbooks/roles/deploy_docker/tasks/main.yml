@@ -39,18 +39,10 @@
 
 - name: Update apt et installation docker-ce
   apt:
-    name: docker-ce
-    state: present
-    update_cache: true
-- name: Update apt et installation docker-ce-cli
-  apt:
-    name: docker-ce-cli
-    state: present
-    update_cache: true
-- name: Update apt et installation reste du docker-composants
-  apt:
     name: 
-      - containerd
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
       - docker-buildx-plugin
       - docker-compose-plugin
     state: present
@@ -67,12 +59,9 @@
     append: true
     groups: docker
 
-- name: start docker
-  service:
-    state: started
-    name: docker.service
-- name: enable docker
+- name: enable and start docker
   systemd:
+    state: started
     enabled: true
     name: docker.service
 - name: start and enable containerd
