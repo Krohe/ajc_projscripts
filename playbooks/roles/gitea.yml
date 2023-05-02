@@ -1,0 +1,31 @@
+- name: "Install gitea"
+  hosts: gitprod
+  vars:
+    gitea_user: "gitea"
+    gitea_home: "/var/lib/gitea"
+    gitea_user_repo_limit: 30
+    gitea_offline_mode: true
+
+    gitea_http_domain: git.yourdomain.fr
+    gitea_root_url: https://git.yourdomain.fr
+
+    
+    gitea_protocol: http
+    gitea_http_listen: 127.0.0.1
+    gitea_http_port: 3000
+
+  
+    gitea_ssh_listen: 0.0.0.0
+    gitea_ssh_port: 2222
+    gitea_ssh_domain: git.yourdomain.fr
+    gitea_start_ssh: true
+
+    gitea_secret_key: 3sp00ky5me
+    gitea_disable_gravatar: true
+    gitea_disable_registration: false
+    gitea_require_signin: true
+    gitea_enable_captcha: true
+
+    gitea_show_user_email: false
+  roles:
+    - gitea
