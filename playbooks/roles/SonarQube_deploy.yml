@@ -18,3 +18,12 @@
       copy:
         src: ../../docker/SonarQube/docker-compose.yml
         dest: ~/sonar/docker-compose.yml
+
+    - name: Tear down existing services
+      docker_compose:
+        project_src: ~/sonar
+        state: absent
+
+    - name: Create and start services
+      community.docker.docker_compose:
+        project_src: ~/sonar
