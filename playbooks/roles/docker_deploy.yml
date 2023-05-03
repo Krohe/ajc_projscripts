@@ -3,7 +3,7 @@
 # changer hosts par all
 
 - name: "installation docker"
-  hosts: sonar
+  hosts: all
   become: true
   tasks:
     - name: Installation des packages requise pour ansible et docker"

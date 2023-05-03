@@ -1,0 +1,67 @@
+requisites: ssh-key sur chaque vm, par `ssh-copy-id -i $PATH/key.pub UbuAJC##@137.74.106.2##`
+
+commande: ansible-playbook -i ./playbooks/inventory ./playbooks/roles/docker_deploy.yml 
+
+
+PLAY [installation docker] *****************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [137.74.106.222]
+ok: [137.74.106.220]
+ok: [137.74.106.229]
+
+TASK [Installation des packages requise pour ansible et docker"] ***************
+ok: [137.74.106.229]
+changed: [137.74.106.222]
+changed: [137.74.106.220]
+
+TASK [mise-a-jour] *************************************************************
+ok: [137.74.106.222]
+ok: [137.74.106.229]
+ok: [137.74.106.220]
+
+TASK [ajouter le repo-key de docker (gpg)] *************************************
+ok: [137.74.106.229]
+changed: [137.74.106.220]
+changed: [137.74.106.222]
+
+TASK [ajoute le repo Docker] ***************************************************
+ok: [137.74.106.229]
+changed: [137.74.106.222]
+changed: [137.74.106.220]
+
+TASK [Update apt et l'installation docker] *************************************
+ok: [137.74.106.229]
+changed: [137.74.106.220]
+changed: [137.74.106.222]
+
+TASK [Ajoute la groupe docker pour l'admin] ************************************
+ok: [137.74.106.229]
+ok: [137.74.106.222]
+ok: [137.74.106.220]
+
+TASK [Ajoute l'administrateur dans la groupe docker] ***************************
+changed: [137.74.106.222]
+changed: [137.74.106.220]
+ok: [137.74.106.229]
+
+TASK [enable and start service docker] *****************************************
+ok: [137.74.106.222]
+ok: [137.74.106.220]
+ok: [137.74.106.229]
+
+TASK [start and enable service containerd] *************************************
+ok: [137.74.106.229]
+ok: [137.74.106.220]
+ok: [137.74.106.222]
+
+TASK [Installation packages python, requise pour l'utilisation docker avec ansible] ***
+ok: [137.74.106.229]
+changed: [137.74.106.220]
+changed: [137.74.106.222]
+
+PLAY RECAP *********************************************************************
+137.74.106.220             : ok=11   changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+137.74.106.222             : ok=11   changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+137.74.106.229             : ok=11   changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
