@@ -1,25 +1,18 @@
 version: '2'
 services:
-  web:
-    image: gitea/gitea:1.8.3
+  server:
+    image: gitea/gitea:1.19.0
+    container_name: gitea
     environment:
-      - USER_UID=1041
-      - USER_GID=1041
-    volumes:
-      - /home/gitea:/data
-    ports:
-      - "5080:3000"
-      - "127.0.0.1:10022:22"
-#    depends_on:
-#      - db
+      - USER_UID=1000
+      - USER_GID=1000
     restart: always
-#  db:
-#    image: mariadb:10
-#    restart: always
-#    environment:
-#      - MYSQL_ROOT_PASSWORD=changeme
-#      - MYSQL_DATABASE=gitea
-#      - MYSQL_USER=gitea
-#      - MYSQL_PASSWORD=changeme
-#    volumes:
-#      - /home/gitea/db/:/var/lib/mysql
+    volumes:
+      - ./gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "3000:3000"
+      - "222:22"
+      - "8080:3000"
+      - "2221:22"
