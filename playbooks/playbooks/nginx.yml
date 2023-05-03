@@ -1,7 +1,7 @@
 ---
 # This playbook installs nginx as a Docker container on a remote host and mounts a volume
 
-- hosts: all
+- hosts: gitprod
   become: yes
   tasks:
     - name: Install Docker Engine
