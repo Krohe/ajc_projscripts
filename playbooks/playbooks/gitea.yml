@@ -4,7 +4,6 @@
   hosts: gitprod
   become: true
   become_user: root
-  become_method: su
   vars:
     docker_dir: /home/gitea/docker
 
@@ -12,15 +11,13 @@
   # TODO check is exist
   - name: Add google DNS server
     command: /bin/sh -c "echo \"nameserver 8.8.8.8\" >> /etc/resolv.conf"
-    register: dns_server
-  - debug: msg = "{{ dns_server.stdout }}"
 
-  - name: Install docker
-    include_role:
-     name: nickjj.docker
-    vars:
-     docker__edition: "ce"
-     docker__version: "18.06"
+  # - name: Install docker
+  #   include_role:
+  #    name: nickjj.docker
+  #   vars:
+  #    docker__edition: "ce"
+  #    docker__version: "18.06"
 
   - name: Add the user 'gitea' with a specific uid and a primary group of 'gitea'
     user:
@@ -47,7 +44,7 @@
 
   - name: Copy docker compose file
     copy:
-      src: ./docker-compose-gitea.yml
+      src: ./../docker-compose-gitea.yml
       dest: "{{docker_dir}}"
       owner: gitea
       group: gitea
@@ -60,44 +57,7 @@
 #      group: gitea
 
   - name: Start docker containers
-    command: /bin/sh -c "cd {{docker_dir}} && docker-compose up -d"
-
-  - name: Create symlinc ssh files to git user
-    file:
-      src: /home/gitea/git/.ssh
-      dest: /home/git/.ssh
-      state: link
-      force: yes
-      owner: git
-      group: git
-
-  - name: Generate ssh key for git user
-    openssh_keypair:
-      path: /home/git/.ssh/id_rsa
-      owner: git
-      group: git
+    command: /bin/sh -c "cd {{docker_dir}} && docker-compose -f docker-compose-gitea.yml up -d"
 
 
-  - name: Change owner authorized_keys
-    file:
-      path: /home/gitea/git/.ssh/authorized_keys
-      owner: git
-      group: git
-
-  - name: Create patch for magik hook
-    file:
-      path: /app/gitea/
-      recurse: true
-      state: directory
-
-  - name: Create magick hook for ssh autoforwarding to docker container
-    copy:
-      src: ./gitea
-      dest: /app/gitea/gitea
-      mode: 775
-
-
-  - name: restart sshd
-    systemd:
-      name: sshd
-      state: restarted
+ 
