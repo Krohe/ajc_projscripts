@@ -12,6 +12,7 @@
           - curl
           - software-properties-common
           - python3-pip
+          - virtualenv
         state: present
         update_cache: true
 
@@ -64,10 +65,9 @@
         enabled: true
         name: containerd.service
 
-
-    - name: set vm.max_map_count to 262144 in sysctl for SonarQube
-      sysctl: name={{ item.key }} value={{ item.value }}
-      with_items:
-        - { key: "vm.max_map_count", value: "262144" }
-        - { key: "fs.file-max", value: "131072" }
-
+    - name: Install docker py
+      pip:
+        name: 
+          - docker
+          - docker-compose
+        state: present
