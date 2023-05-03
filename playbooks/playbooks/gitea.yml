@@ -77,11 +77,6 @@
       owner: git
       group: git
 
-#TODO: check is exist
-  - name: Copy pub key git user to gitea ssh
-    command: >
-             /bin/sh -c "echo \"no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty
-             $(cat /home/git/.ssh/id_rsa.pub)\"  >> /home/git/.ssh/authorized_keys"
 
   - name: Change owner authorized_keys
     file:
@@ -101,15 +96,6 @@
       dest: /app/gitea/gitea
       mode: 775
 
-  # TODO check is exist
-  - name: Modify sshd_donfig filr for no check .ssh modes
-    copy:
-      src: ./sshd_config
-      dest: /etc/ssh/sshd_config
-      owner: root
-      group: root
-      mode: 644
-      validate: '/usr/sbin/sshd -T -f %s'
 
   - name: restart sshd
     systemd:
