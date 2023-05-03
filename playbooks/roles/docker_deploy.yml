@@ -1,11 +1,12 @@
 # https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-20-04
 # https://docs.docker.com/engine/install/debian/
 # changer hosts par all
+
 - name: "installation docker"
   hosts: sonar
   become: true
   tasks:
-    - name: Installation des autres packages requise"
+    - name: Installation des packages requise pour ansible et docker"
       apt:
         name:
           - ca-certificates
@@ -16,23 +17,23 @@
         state: present
         update_cache: true
 
-    - name: Update+Upgrade
+    - name: mise-a-jour
       apt:
         update_cache: true
         upgrade: full
 
-    - name: One way to avoid apt_key once it is removed from your distro
+    - name: On dois ajouter la clef apt pour avoir d'access au repo officiell de docker
       block:
         - name: ajouter le repo-key de docker (gpg)
           get_url:
             url: "https://download.docker.com/linux/ubuntu/gpg"
             dest: /etc/apt/trusted.gpg.d/docker.asc
-        - name: Add Docker Repository
+        - name: ajoute le repo Docker
           apt_repository:
             repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/docker.asc] https://download.docker.com/linux/ubuntu jammy stable"
             state: present
 
-    - name: Update apt et installation docker-ce
+    - name: Update apt et l'installation docker
       apt:
         name: 
           - docker-ce
@@ -44,6 +45,7 @@
         update_cache: true
 
 # https://docs.docker.com/engine/install/linux-postinstall/
+# important pour utilisé docker comme utilisateur, pas comme sudo
     - name: Ajoute la groupe docker pour l'admin
       group:
         name: docker
@@ -54,18 +56,18 @@
         append: true
         groups: docker
 
-    - name: enable and start docker
+    - name: enable and start service docker
       systemd:
         state: started
         enabled: true
         name: docker.service
-    - name: start and enable containerd
+    - name: start and enable service containerd
       systemd:
         state: started
         enabled: true
         name: containerd.service
 
-    - name: Install docker py
+    - name: Installation packages python, requise pour l'utilisation docker avec ansible
       pip:
         name: 
           - docker
