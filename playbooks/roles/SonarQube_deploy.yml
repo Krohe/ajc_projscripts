@@ -16,7 +16,7 @@
         path: ~/sonar
     - name: Copier fichier docker-compose
       copy:
-        src: ../../docker/SonarQube/docker-compose.yml
+        src: ../files/docker-compose_sonar.yml
         dest: ~/sonar/docker-compose.yml
 
     - name: arret et supprimer les services existant déjà (optionelle?)
