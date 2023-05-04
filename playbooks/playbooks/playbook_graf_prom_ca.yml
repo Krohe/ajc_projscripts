@@ -1,0 +1,23 @@
+- name: Installer Grafana, Prometheus et Cadvisor
+  hosts: monitoring
+  
+  become: true
+  vars:
+    docker_dir: "/home/admin/docker"
+
+  tasks:
+  - name: Create work dir for docker-compose
+    file:
+      path: "{{docker_dir}}"
+      recurse: true
+      state: directory
+
+  - name: Copy docker compose file
+    copy:
+      src: ./docker-compose.yml
+      dest: "{{docker_dir}}/"
+
+  - name: Démarrer les conteneurs Docker pour Grafana, Prometheus et Cadvisor
+    docker_compose:
+      project_src: "{{docker_dir}}/"
+      state: present
