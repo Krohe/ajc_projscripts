@@ -1,0 +1,24 @@
+- name: Installer Cadvisor
+  hosts:
+    sonar
+    gitprod
+  become: true
+  vars:
+    docker_dir: "/home/admin/docker/cadvisor"
+
+  tasks:
+  - name: Create work dir for docker-compose
+    file:
+      path: "{{docker_dir}}"
+      recurse: true
+      state: directory
+
+  - name: Copy docker compose file
+    copy:
+      src: ./docker-compose.yaml
+      dest: "{{docker_dir}}/"
+
+  - name: Démarrer le conteneur Cadvisor
+    docker_compose:
+      project_src: "{{docker_dir}}/"
+      state: present
