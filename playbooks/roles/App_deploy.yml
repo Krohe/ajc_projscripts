@@ -1,0 +1,33 @@
+# https://docs.ansible.com/ansible/latest/collections/community/docker/docker_compose_module.html#ansible-collections-community-docker-docker-compose-module
+# https://hub.docker.com/_/sonarqube
+
+- name: "installation App"
+  hosts: sonar
+  tasks:
+    - name: creation dossier projet
+      file:
+        state: directory
+        path: ~/code/app
+    - name: Copier fichier dockerfile
+      copy:
+        src: ../files/Dockerfile_appli
+        dest: ~/code/Dockerfile
+    - name: Copier et extract fichiers application
+      unarchive:
+        src: ../files/app.tar.xz
+        dest: ~/code/
+
+    - name: Build image
+      community.docker.docker_image:
+        name: application
+        build:
+          path: ~/code/
+        source: build
+
+    - name: Run application Docker container
+      docker_container:
+        name: application
+        image: application
+        state: started
+        ports:
+          - "8080:8080"
