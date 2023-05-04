@@ -1,0 +1,19 @@
+version: '3.2'
+services:
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+    - 8081:8080
+    volumes:
+    - /:/rootfs
+    - /var/run:/var/run
+    - /sys:/sys
+    - /var/lib/docker/:/var/lib/docker
+    depends_on:
+    - redis
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+    - 6379:6379
