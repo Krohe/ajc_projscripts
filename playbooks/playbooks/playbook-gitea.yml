@@ -12,12 +12,6 @@
   - name: Add google DNS server
     command: /bin/sh -c "echo \"nameserver 8.8.8.8\" >> /etc/resolv.conf"
 
-  # - name: Install docker
-  #   include_role:
-  #    name: nickjj.docker
-  #   vars:
-  #    docker__edition: "ce"
-  #    docker__version: "18.06"
 
   - name: Add the user 'gitea' with a specific uid and a primary group of 'gitea'
     user:
@@ -49,12 +43,6 @@
       owner: gitea
       group: gitea
 
-#  - name: Copy config file
-#    copy:
-#      src: ./app.ini
-#      dest: /home/gitea/gitea/conf/app.ini
-#      owner: gitea
-#      group: gitea
 
   - name: Start docker containers
     command: /bin/sh -c "cd {{docker_dir}} && docker-compose -f docker-compose-gitea.yml up -d"
