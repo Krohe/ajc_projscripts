@@ -1,30 +1,31 @@
-- name: "installation App"
+- name: "installation reverse_proxy"
   hosts: sonar
   tasks:
     - name: creation dossier projet
       file:
         state: directory
-        path: ~/code/app
+        path: ~/proxy
+        
     - name: Copier fichier dockerfile
       copy:
-        src: ../files/Dockerfile_appli
-        dest: ~/code/Dockerfile
+        src: ../files/Dockerfile_proxy
+        dest: ~/proxy/Dockerfile
     - name: Copier et extract fichiers application
-      unarchive:
-        src: ../files/app.tar.xz
-        dest: ~/code/
+      copy:
+        src: ../files/default.conf_proxy
+        dest: ~/proxy/default.conf
 
     - name: Build image
       docker_image:
-        name: application
+        name: reverse_proxy
         build:
-          path: ~/code/
+          path: ~/proxy/
         source: build
 
     - name: Run application Docker container
       docker_container:
-        name: application
-        image: application
+        name: reverse_proxy
+        image: reverse_proxy
         state: started
         ports:
-          - "8080:8080"
+          - "80:80"
