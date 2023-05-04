@@ -14,12 +14,16 @@
       copy:
         src: ../files/default.conf_proxy
         dest: ~/proxy/default.conf
+    - name: clear cache
+      docker_prune:
+        builder_cache: true
 
     - name: Build image
       docker_image:
         name: reverse_proxy
         build:
           path: ~/proxy/
+          nocache: true
         source: build
 
     - name: Run application Docker container
