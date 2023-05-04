@@ -1,5 +1,5 @@
 - name: "installation reverse_proxy"
-  hosts: sonar
+  hosts: gitprod
   tasks:
     - name: creation dossier projet
       file:

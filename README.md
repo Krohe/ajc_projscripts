@@ -1,12 +1,7 @@
 # ajc_projscripts
 
-Ici, je collecte tout les scripts on a utilisé pour démarré notre infrastructure. 
+Ce projet contient une collection des fichiers config, des playbooks et de docker/docker_compose.
 
-* Dossier playbooks:
-    * fichier inventory avec notre machines à distantes
-    * dossier roles avec notre playbooks
-        * docker_deploy.yml (fini/testé/deployé sur 229)
-        * SonarQube_deploy.yml (fini/testé/deployé sur 229)
-* Dossier Docker
-    * docker-compose pour mise-en-place SonarQube avec une Postgresql base de donnée
-* Dossier scripts avec des scripts ne plus utilisé
+* fichier inventory avec notre machines à distantes
+* dossier playbooks qui contient les playbooks de deploiement
+* dossier fichier qui contient les docker_compose.yml, les config, le Dockerfile, et le tar de l'application.

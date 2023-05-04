@@ -1,0 +1,34 @@
+version: '3.9'
+services:
+  gitea-srv:
+    image: gitea/gitea:latest
+    hostname: gitea-srv
+    container_name: gitea-srv
+    depends_on:
+      - giteadb    
+    restart: always
+    environment:
+      ROOT_URL: http://somily.app.ajc/git/
+      SSH_DOMAIN: "gitea"
+      DB_TYPE: "mysql"
+      DB_HOST: "giteadb:3306"
+      DB_NAME: "gitea"
+      DB_USER: "gitea"
+      DB_PASSWD: "gitea"
+    volumes:
+      - ./gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8080:3000"
+      - "2221:22"
+  giteadb:
+    image: mariadb:10
+    restart: always
+    volumes:
+      - ./gitea-db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "gitea"
+      MYSQL_USER: "gitea"
+      MYSQL_PASSWORD: "gitea"
+      MYSQL_DATABASE: "gitea"
